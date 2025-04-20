@@ -20,31 +20,16 @@ cp ./build/libs/*.jar ~/QuPath/v0.5/extensions
 ```
 
 ## Usage
-
-To start a Py4J gateway from QuPath, you can either click the Python icon on
-the QuPath toolbar, or use the menu item
-`Extension -> Py4J -> Start Py4J Gateway`.
-
-This dialog allows you to specify the port used for the websocket connection,
-and an optional authentication token:
-
-![A dialog box for the QuPath Py4J extension. A brief description of the purpose of a gateway, followed by "Port" and "Token" text fields followed by "Random" and "Copy" buttons, with "Cancel" and "OK" buttons at the bottom of the dialog.](gateway-options.png)
-
-Once a gateway is started, you can connect from a Python process using
-[qubalab](https://github.com/qupath/qubalab/):
-
+Python -
 ```python
-from qubalab.qupath import qupath_gateway
-gateway = qupath_gateway.create_gateway(port=25333)
+from py4j.java_gateway import JavaGateway
 
-gateway.getExtensionVersion() # query the verison of the QuPath Py4J extension
+gateway = JavaGateway()     # connect to QuPath
+QPEx = gateway.jvm.qupath.ext.py4j.core.QuPathEZ
 ```
 
-Further documentation can be found in the [qubalab project](https://github.com/qupath/qubalab/).
-
-## Development
-
-It's recommended to use the extension setup described in
-[the QuPath extension template](https://github.com/qupath/qupath-extension-template?tab=readme-ov-file#set-up-in-an-ide-optional)
-for this extension.
+QuPath -
+```groovy
+import static qupath.ext.py4j.core.QuPathEZ.*
+```
 

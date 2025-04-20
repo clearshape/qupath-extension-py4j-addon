@@ -38,10 +38,126 @@ import java.net.URISyntaxException;
 
 
 /**
- * Add more useful methods on top of both {@link QuPathEntryPoint} and {@link QuPathFX}.
+ * Add methods I found useful to {@link QuPathEntryPoint}.
  * It will serve the main entry point of the extension.
  */
-public class QuPathEZ extends QuPathFX {
+public class QuPathEntryPointAddon extends QuPathEntryPoint {
+
+	/**
+	 * Refresh the current project {@link QPEx#getProject() getProject()} in QuPath.
+	 * This should be called whenever the current project has changed
+	 * (e.g. by adding or removing items)
+	 *
+	 * @see QPEx#getProject()
+	 * @see QuPathGUI#refreshProject()
+	 */
+	public static void refreshProjectInQuPath() {
+		FXUtils.callOnApplicationThread(() -> {
+			getQuPath().refreshProject();
+			return null;
+		});
+	}
+
+	/**
+	 * Repaint the entire image in the current viewer
+	 * {@link QPEx#getCurrentViewer() getCurrentViewer()} in QuPath.
+	 * This should be called whenever a major change in display is triggered,
+	 * such as changing the brightness/contrast or lookup table.
+	 *
+	 * @see QPEx#getCurrentViewer()
+	 * @see QuPathViewer#repaintEntireImage()
+	 */
+	public static void repaintEntireImageInQuPath() {
+		FXUtils.callOnApplicationThread(() -> {
+			getCurrentViewer().repaintEntireImage();
+			return null;
+		});
+	}
+
+	/**
+	 * Open project <code>project</code> in QuPath.
+	 * It will become the current project
+	 * and can be retrieved by {@link QPEx#getProject() getProject()}
+	 *
+	 * @param project the project to open
+	 *
+	 * @see QPEx#getProject()
+	 * @see QuPathGUI#setProject(Project)
+	 */
+	public static void openProjectInQuPath(Project<BufferedImage> project) {
+		FXUtils.callOnApplicationThread(() -> {
+			getQuPath().setProject(project);
+			return null;
+		});
+	}
+
+	/**
+	 * Close the current project {@link QPEx#getProject() getProject()} in QuPath.
+	 * {@link QPEx#getProject() getProject()} will return <b>null</b> when this is done.
+	 *
+	 * @see QPEx#getProject()
+	 * @see Commands#closeProject(QuPathGUI)
+	 */
+	public static void closeProjectInQuPath() {
+		FXUtils.callOnApplicationThread(() -> {
+			Commands.closeProject(getQuPath());
+			return null;
+		});
+	}
+
+	/**
+	 * Open image <code>imageData</code> in the current viewer
+	 * {@link QPEx#getCurrentViewer() getCurrentViewer()} in QuPath.
+	 * It will become the current image data and
+	 * can be retrieved by {@link QPEx#getCurrentImageData() getCurrentImageData()}.
+	 *
+	 * <p>
+	 *     If the current project contains <code>imageData</code>,
+	 *     the associated {@link ProjectImageEntry} will become the current project entry
+	 *     and can be retrieved by {@link QPEx#getProjectEntry() getProjectEntry()}.
+	 *     Otherwise, the current project will be closed.
+	 * </p>
+	 *
+	 * @param imageData the image to open
+	 *
+	 * @see QPEx#getCurrentImageData()
+	 * @see QPEx#getProjectEntry()
+	 * @see QuPathViewer#setImageData(ImageData)
+	 */
+	public static void openImageDataInQuPath(ImageData<BufferedImage> imageData) {
+		FXUtils.callOnApplicationThread(() -> {
+//			saveCurrentImageData();
+			if ((getProject() != null) && (getProject().getEntry(imageData) == null)) {
+				closeProjectInQuPath();
+			}
+			getCurrentViewer().setImageData(imageData);
+			getQuPath().refreshProject();
+			return null;
+		});
+	}
+
+	/**
+	 * Close the current image data {@link QPEx#getCurrentImageData() getCurrentImageData()}
+	 * in QuPath. {@link QPEx#getCurrentImageData() getCurrentImageData()} will return <b>null</b>
+	 * when this is done.
+	 *
+	 * <p>
+	 *     The associated project entry will become "inactive". That is,
+	 *     {@link QPEx#getProjectEntry() getProjectEntry()} will return <b>null</b>.
+	 * </p>
+	 *
+	 * @see QPEx#getCurrentImageData()
+	 * @see QPEx#getProjectEntry()
+	 * @see QuPathViewer#resetImageData()
+	 */
+	public static void closeImageDataInQuPath() {
+		FXUtils.callOnApplicationThread(() -> {
+//			saveCurrentImageData();
+			getCurrentViewer().resetImageData();
+			getQuPath().refreshProject();
+			return null;
+		});
+	}
 
 	/**
 	 * Create a new {@link Project} at path <code>projectPath</code>.
@@ -67,7 +183,7 @@ public class QuPathEZ extends QuPathFX {
 	 * @throws IOException if an error occurs while saving the project
 	 *
 	 * @see Project#syncChanges()
-	 * @see QuPathEZ#createProject(String)
+	 * @see QuPathEntryPointAddon#createProject(String)
 	 */
 	public static void saveProject(Project<BufferedImage> project) throws IOException {
 		if (project != null) {
@@ -99,8 +215,8 @@ public class QuPathEZ extends QuPathFX {
 	 *
 	 * <p>
 	 *     Its {@link ImageData.ImageType ImageType} is estimated by
-	 *     {@link QuPathEZ#estimatedImageType} and
-	 *     the thumbnail is refreshed by {@link QuPathEZ#refreshThumbnail}
+	 *     {@link QuPathEntryPointAddon#estimatedImageType} and
+	 *     the thumbnail is refreshed by {@link QuPathEntryPointAddon#refreshThumbnail}
 	 * </p>
 	 *
 	 * @param project the project to add the image entry to
@@ -125,8 +241,8 @@ public class QuPathEZ extends QuPathFX {
 	 *
 	 * <p>
 	 *     Its {@link ImageData.ImageType ImageType} is estimated by
-	 *     {@link QuPathEZ#estimatedImageType} and
-	 *     the thumbnail is refreshed by {@link QuPathEZ#refreshThumbnail}
+	 *     {@link QuPathEntryPointAddon#estimatedImageType} and
+	 *     the thumbnail is refreshed by {@link QuPathEntryPointAddon#refreshThumbnail}
 	 * </p>
 	 *
 	 * @param project the project to add the image entry to
@@ -136,7 +252,7 @@ public class QuPathEZ extends QuPathFX {
 	 * @throws IOException if an error occurs while loading the image file
 	 *
 	 * @see ProjectCommands#addSingleImageToProject
-	 * @see QuPathEZ#createImageServer
+	 * @see QuPathEntryPointAddon#createImageServer
 	 */
 	public static ProjectImageEntry<BufferedImage> addImageEntry(
 			Project<BufferedImage> project,
@@ -166,7 +282,7 @@ public class QuPathEZ extends QuPathFX {
 
 	/**
 	 * Create a new {@link ImageData} using image <code>server</code>.
-	 * Its image type is estimated by {@link QuPathEZ#estimatedImageType}.
+	 * Its image type is estimated by {@link QuPathEntryPointAddon#estimatedImageType}.
 	 *
 	 * @param server the image server used to create the image data
 	 * @return <code>imageData</code> - the created image data
@@ -180,14 +296,14 @@ public class QuPathEZ extends QuPathFX {
 
 	/**
 	 * Create a new {@link ImageData} using image file <code>imagePath</code>.
-	 * Its image type is estimated by {@link QuPathEZ#estimatedImageType}.
+	 * Its image type is estimated by {@link QuPathEntryPointAddon#estimatedImageType}.
 	 *
 	 * @param imagePath the image file used to create the image data
 	 * @return <code>imageData</code> - the created image data
 	 * @throws URISyntaxException if the image path is not a valid {@link URI}
 	 * @throws IOException if an error occurs while loading the image file
 	 *
-	 * @see QuPathEZ#createImageServer
+	 * @see QuPathEntryPointAddon#createImageServer
 	 */
 	public static ImageData<BufferedImage> createImageData(String imagePath) throws URISyntaxException, IOException {
 		return createImageData(createImageServer(imagePath));
@@ -249,7 +365,7 @@ public class QuPathEZ extends QuPathFX {
 	 * @see ImageJServer#dumpMetadata()
 	 */
 	public static ImageServer<BufferedImage> createImageJImageServer(String imagePath) throws URISyntaxException {
-		return new ImageJServerBuilder().buildServer(new URI(imagePath));
+		return new ImageJServerBuilder().buildServer(toURI(imagePath));
 	}
 
 	/**
@@ -263,7 +379,7 @@ public class QuPathEZ extends QuPathFX {
 	 * @see BioFormatsImageServer#dumpMetadata()
 	 */
 	public static ImageServer<BufferedImage> createBioFormatsImageServer(String imagePath) throws URISyntaxException {
-		return new BioFormatsServerBuilder().buildServer(new URI(imagePath));
+		return new BioFormatsServerBuilder().buildServer(toURI(imagePath));
 	}
 
 	/**
@@ -277,7 +393,7 @@ public class QuPathEZ extends QuPathFX {
 	 * @see OpenslideImageServer#dumpMetadata()
 	 */
 	public static ImageServer<BufferedImage> createOpenslideImageServer(String imagePath) throws URISyntaxException {
-		return new OpenslideServerBuilder().buildServer(new URI(imagePath));
+		return new OpenslideServerBuilder().buildServer(toURI(imagePath));
 	}
 
 	/**
@@ -296,7 +412,7 @@ public class QuPathEZ extends QuPathFX {
 	 * @see ImageServers#buildServer
 	 */
 	public static ImageServer<BufferedImage> createImageServer(String imagePath) throws URISyntaxException, IOException {
-		return ImageServers.buildServer(new URI(imagePath));
+		return ImageServers.buildServer(toURI(imagePath));
 	}
 
 	/**
@@ -327,7 +443,7 @@ public class QuPathEZ extends QuPathFX {
 	 * @throws URISyntaxException if the image path is not a valid {@link URI}
 	 * @throws IOException if an error occurs while loading the image file
 	 *
-	 * @see QuPathEZ#createImageServer
+	 * @see QuPathEntryPointAddon#createImageServer
 	 */
 	public static ImageServer<BufferedImage> loadImageServer(String jsonServerPath) throws URISyntaxException, IOException {
 		return createImageServer(jsonServerPath);
@@ -408,6 +524,25 @@ public class QuPathEZ extends QuPathFX {
 			ImageServer<BufferedImage> server) throws IOException {
 		entry.setThumbnail(ProjectCommands.getThumbnailRGB(server));
 	}
+
+	/**
+	 * Convert a file path to a URI.
+	 *
+	 * <p>
+	 *     If the path is already a URI string, convert it to a URI.
+	 *     Otherwise, it will be converted to a file URI (ie add "file:").
+	 * </p>
+	 * @param imagePath the path to convert
+	 * @return the URI
+	 */
+	private static URI toURI(String imagePath) throws URISyntaxException {
+		if (imagePath.startsWith("file:") || imagePath.startsWith("http:") || imagePath.startsWith("https:")) {
+			return new URI(imagePath);
+		} else {
+			return new File(imagePath).toURI();
+		}
+	}
+
 
 //	/**
 //	 * Read the first z-slice and first time point of
@@ -563,4 +698,66 @@ public class QuPathEZ extends QuPathFX {
 //			ImageData.ImageType type) throws IOException {
 //		return createImageData(ImageServers.buildServer(imagePath), type);
 //	}
+
+//
+//	 comment out these 3 methods
+//	 1. use OpenImageDataInPath(imageData) to open the entry
+//	 2. with imageData = entry.readImageData() <- this is how to get the imageData with GUI!
+//	 3. this will ensure the same codes (GUI or not) -
+//	    a. imageData == getCurrentImageData()
+//	    b. imageData is the associated imageData of entry
+//	 4. entry.saveImageData(imageData) to save your analysis results
+//
+
+//	/**
+//	 * Open an image entry in QuPath.
+//	 * <p>
+//	 * If the current image data has been changed, it will be saved before opening
+//	 * the new image entry.
+//	 * </p>
+//	 *
+//	 * @param entry the image entry to open
+//	 * @return true if the image entry was opened, false otherwise
+//	 */
+//	public static boolean openImageEntryInQuPath(ProjectImageEntry<BufferedImage> entry) {
+//		return FXUtils.callOnApplicationThread(() -> {
+//			saveCurrentImageData();
+//			return getQuPath().openImageEntry(entry);
+//		});
+//	}
+
+//	/**
+//	 * Close the current image entry in QuPath.
+//	 * <p>
+//	 * If the current image data has been changed, it will be saved before closing
+//	 * the image entry.
+//	 * </p>
+//	 */
+//	public static void closeImageEntryInQuPath() {
+//		FXUtils.callOnApplicationThread(() -> {
+//			saveCurrentImageData();
+//			getCurrentViewer().resetImageData();
+//			refreshProject();
+//			return null;
+//		});
+//	}
+
+//	/**
+//	 * Close the specified image entry in QuPath.
+//	 * <p>
+//	 * If the current image data has been changed, it will be saved before closing
+//	 * the image entry.
+//	 * </p>
+//	 *
+//	 * @param entry the image entry to close
+//	 */
+//	public static void closeImageEntryInQuPath(ProjectImageEntry<BufferedImage> entry) {
+//		FXUtils.callOnApplicationThread(() -> {
+//			if (entry == getProject().getEntry(getCurrentImageData())) {
+//				closeImageEntryInQuPath();
+//			}
+//			return null;
+//		});
+//	}
+
 }

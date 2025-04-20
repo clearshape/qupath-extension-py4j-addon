@@ -5,7 +5,7 @@ plugins {
 }
 
 qupathExtension {
-	name = "qupath-extension-py4j"
+	name = "qupath-extension-py4j-addon"
 	version = "0.1.0-rc1"
 	group = "io.github.qupath"
 	description = "Connect QuPath to Python using Py4J"

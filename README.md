@@ -2,7 +2,10 @@
 
 Add several methods I found useful to [QuPath Py4J extension](https://github.com/qupath/qupath-extension-py4j)
 
-Feel free to use it and many thanks for the great works of
+[QuPath Py4J extension](https://github.com/qupath/qupath-extension-py4j) is bundled for simplicity.
+Let me know if that is a problem.
+
+Feel free to use it anyway you want and many thanks for the great works of
 [QuPath Py4J extension](https://github.com/qupath/qupath-extension-py4j) and
 [Py4J](https://www.py4j.org/)
 

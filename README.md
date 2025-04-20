@@ -28,11 +28,11 @@ Python -
 from py4j.java_gateway import JavaGateway
 
 gateway = JavaGateway()     # connect to QuPath
-QPEx = gateway.jvm.qupath.ext.py4j.core.QuPathEZ
+QPEx = gateway.entry_point
 ```
 
 QuPath -
 ```groovy
-import static qupath.ext.py4j.core.QuPathEZ.*
+import static qupath.ext.py4j.core.QuPathEntryPointAddon.*
 ```
 

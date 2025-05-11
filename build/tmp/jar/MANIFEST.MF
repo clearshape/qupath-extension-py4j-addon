@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: qupath-extension-py4j-addon
-Implementation-Version: 0.1.0-rc1
-Automatic-Module-Name: qupath.extension.py4j
-QuPath-Version: 0.6.0-SNAPSHOT
-

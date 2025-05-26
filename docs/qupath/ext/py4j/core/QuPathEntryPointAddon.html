@@ -278,6 +278,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Set the image type of image data <code>imageData</code>.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setPathClassesInQuPath(java.util.Collection)" class="member-name-link">setPathClassesInQuPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="https://qupath.github.io/javadoc/docs/qupath/lib/objects/classes/PathClass.html" title="class or interface in qupath.lib.objects.classes" class="external-link">PathClass</a>&gt;&nbsp;pathClasses)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Set the available <a href="https://qupath.github.io/javadoc/docs/qupath/lib/objects/classes/PathClass.html" title="class or interface in qupath.lib.objects.classes" class="external-link"><code>PathClass</code></a>es in QuPath and the current project <a href="https://qupath.github.io/javadoc/docs/qupath/lib/scripting/QP.html#getProject()" title="class or interface in qupath.lib.scripting" class="external-link"><code>getProject()</code></a>.</div>
+</div>
 </div>
 </div>
 </div>
@@ -440,6 +445,25 @@ loadScripts(document, 'script');</script>
 <li><a href="https://qupath.github.io/javadoc/docs/qupath/lib/scripting/QP.html#getCurrentImageData()" title="class or interface in qupath.lib.scripting" class="external-link"><code>QP.getCurrentImageData()</code></a></li>
 <li><a href="https://qupath.github.io/javadoc/docs/qupath/lib/scripting/QP.html#getProjectEntry()" title="class or interface in qupath.lib.scripting" class="external-link"><code>QP.getProjectEntry()</code></a></li>
 <li><a href="https://qupath.github.io/javadoc/docs/qupath/lib/gui/viewer/QuPathViewer.html#resetImageData()" title="class or interface in qupath.lib.gui.viewer" class="external-link"><code>QuPathViewer.resetImageData()</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setPathClassesInQuPath(java.util.Collection)">
+<h3>setPathClassesInQuPath</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setPathClassesInQuPath</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="https://qupath.github.io/javadoc/docs/qupath/lib/objects/classes/PathClass.html" title="class or interface in qupath.lib.objects.classes" class="external-link">PathClass</a>&gt;&nbsp;pathClasses)</span></div>
+<div class="block">Set the available <a href="https://qupath.github.io/javadoc/docs/qupath/lib/objects/classes/PathClass.html" title="class or interface in qupath.lib.objects.classes" class="external-link"><code>PathClass</code></a>es in QuPath and the current project <a href="https://qupath.github.io/javadoc/docs/qupath/lib/scripting/QP.html#getProject()" title="class or interface in qupath.lib.scripting" class="external-link"><code>getProject()</code></a>.
+ This updates both the project's path classes and the GUI's available path classes.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>pathClasses</code> - The collection of PathClass objects to set.</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list-long">
+<li><a href="https://qupath.github.io/javadoc/docs/qupath/lib/projects/Project.html#setPathClasses(java.util.Collection)" title="class or interface in qupath.lib.projects" class="external-link"><code>Project.setPathClasses(Collection)</code></a></li>
+<li><a href="https://qupath.github.io/javadoc/docs/qupath/lib/gui/QuPathGUI.html#getAvailablePathClasses()" title="class or interface in qupath.lib.gui" class="external-link"><code>QuPathGUI.getAvailablePathClasses()</code></a></li>
 </ul>
 </dd>
 </dl>

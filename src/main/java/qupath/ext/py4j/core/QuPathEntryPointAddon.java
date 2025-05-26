@@ -27,6 +27,7 @@ import qupath.lib.gui.commands.Commands;
 import qupath.lib.projects.Projects;
 import qupath.lib.projects.ProjectIO;
 import qupath.lib.gui.commands.ProjectCommands;
+import qupath.lib.objects.classes.PathClass;
 import qupath.lib.regions.RegionRequest;
 
 import java.awt.image.BufferedImage;
@@ -35,6 +36,7 @@ import java.io.File;
 import java.net.URI;
 import java.io.FileWriter;
 import java.net.URISyntaxException;
+import java.util.Collection;
 
 
 /**
@@ -155,6 +157,23 @@ public class QuPathEntryPointAddon extends QuPathEntryPoint {
 //			saveCurrentImageData();
 			getCurrentViewer().resetImageData();
 			getQuPath().refreshProject();
+			return null;
+		});
+	}
+
+	/**
+	 * Set the available {@link PathClass}es in QuPath and the current project {@link QPEx#getProject() getProject()}.
+	 * This updates both the project's path classes and the GUI's available path classes.
+	 *
+	 * @param pathClasses The collection of PathClass objects to set.
+	 *
+	 * @see Project#setPathClasses(Collection)
+	 * @see QuPathGUI#getAvailablePathClasses()
+	 */
+	public static void setPathClassesInQuPath(Collection<? extends PathClass> pathClasses) {
+		getProject().setPathClasses(pathClasses);  // set the path classes of the current project
+		FXUtils.callOnApplicationThread(() -> {    // set the path classes of the current QuPath
+			getQuPath().getAvailablePathClasses().setAll(pathClasses);
 			return null;
 		});
 	}

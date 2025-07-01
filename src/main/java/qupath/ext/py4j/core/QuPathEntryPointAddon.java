@@ -162,20 +162,50 @@ public class QuPathEntryPointAddon extends QuPathEntryPoint {
 	}
 
 	/**
-	 * Set the available {@link PathClass}es in QuPath and the current project {@link QPEx#getProject() getProject()}.
-	 * This updates both the project's path classes and the GUI's available path classes.
+	 * Set the available {@link PathClass}es of both {@link QPEx#getQuPath() getQuPath()}
+	 * and {@link QPEx#getProject() getProject()}.
 	 *
 	 * @param pathClasses The collection of PathClass objects to set.
+	 * @param refreshProject If true, the project's path classes will also be updated.
+	 *                       This is useful when the project is currently open and
+	 *                       you want to ensure its internal state reflects the new path classes.
+	 *                       If false, only the GUI's available path classes are updated.
 	 *
 	 * @see Project#setPathClasses(Collection)
 	 * @see QuPathGUI#getAvailablePathClasses()
 	 */
-	public static void setPathClassesInQuPath(Collection<? extends PathClass> pathClasses) {
-		getProject().setPathClasses(pathClasses);  // set the path classes of the current project
+	public static void setPathClassesInQuPath(
+			Collection<? extends PathClass> pathClasses,
+			boolean refreshProject) {
 		FXUtils.callOnApplicationThread(() -> {    // set the path classes of the current QuPath
 			getQuPath().getAvailablePathClasses().setAll(pathClasses);
 			return null;
 		});
+		if (refreshProject && (getProject() != null)) {
+			getProject().setPathClasses(pathClasses);  // set the path classes of the current project
+		}
+	}
+
+	/**
+	 * Reset the available {@link PathClass}es of both {@link QPEx#getQuPath() getQuPath()}
+	 * and {@link QPEx#getProject() getProject()} to their default values.
+	 * 
+	 * @param refreshProject If true, the project's path classes will also be updated.
+	 *                       This is useful when the project is currently open and
+	 *                       you want to ensure its internal state reflects the new path classes.
+	 *
+	 * @see Project#setPathClasses(Collection)
+	 * @see QuPathGUI#resetAvailablePathClasses()
+	 */
+	public static void resetPathClassesInQuPath(boolean refreshProject) {
+        // reset the path classes of the current QuPath to the default values
+        var pathClasses = FXUtils.callOnApplicationThread(() -> {
+            getQuPath().resetAvailablePathClasses();
+            return getQuPath().getAvailablePathClasses();
+        });
+		if (refreshProject && (getProject() != null)) {
+			getProject().setPathClasses(pathClasses);  // set the path classes of the current project
+		}
 	}
 
 	/**

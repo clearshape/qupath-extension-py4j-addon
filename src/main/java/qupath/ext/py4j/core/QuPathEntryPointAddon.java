@@ -77,18 +77,21 @@ public class QuPathEntryPointAddon extends QuPathEntryPoint {
 	}
 
 	/**
-	 * Open project <code>project</code> in QuPath.
-	 * It will become the current project
-	 * and can be retrieved by {@link QPEx#getProject() getProject()}
+	 * Open project <code>project</code> and update the available path classes in QuPath.
+	 * {@link QPEx#getProject() getProject()} will return <code>project</code>.
+	 * The path classes of QuPath will be the same as the path classes of <code>project</code>.
 	 *
 	 * @param project the project to open
 	 *
 	 * @see QPEx#getProject()
 	 * @see QuPathGUI#setProject(Project)
+	 * @see QuPathGUI#getAvailablePathClasses()
+	 * @see Project#getPathClasses()
 	 */
 	public static void openProjectInQuPath(Project<BufferedImage> project) {
 		FXUtils.callOnApplicationThread(() -> {
 			getQuPath().setProject(project);
+			getQuPath().getAvailablePathClasses().setAll(project.getPathClasses());
 			return null;
 		});
 	}

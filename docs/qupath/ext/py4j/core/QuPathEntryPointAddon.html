@@ -220,7 +220,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#openProjectInQuPath(qupath.lib.projects.Project)" class="member-name-link">openProjectInQuPath</a><wbr>(<a href="https://qupath.github.io/javadoc/docs/qupath/lib/projects/Project.html" title="class or interface in qupath.lib.projects" class="external-link">Project</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link">BufferedImage</a>&gt;&nbsp;project)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Open project <code>project</code> in QuPath.</div>
+<div class="block">Open project <code>project</code> and update the available path classes in QuPath.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#refreshProjectInQuPath()" class="member-name-link">refreshProjectInQuPath</a>()</code></div>
@@ -372,17 +372,19 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="openProjectInQuPath(qupath.lib.projects.Project)">
 <h3>openProjectInQuPath</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">openProjectInQuPath</span><wbr><span class="parameters">(<a href="https://qupath.github.io/javadoc/docs/qupath/lib/projects/Project.html" title="class or interface in qupath.lib.projects" class="external-link">Project</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link">BufferedImage</a>&gt;&nbsp;project)</span></div>
-<div class="block">Open project <code>project</code> in QuPath.
- It will become the current project
- and can be retrieved by <a href="https://qupath.github.io/javadoc/docs/qupath/lib/scripting/QP.html#getProject()" title="class or interface in qupath.lib.scripting" class="external-link"><code>getProject()</code></a></div>
+<div class="block">Open project <code>project</code> and update the available path classes in QuPath.
+ <a href="https://qupath.github.io/javadoc/docs/qupath/lib/scripting/QP.html#getProject()" title="class or interface in qupath.lib.scripting" class="external-link"><code>getProject()</code></a> will return <code>project</code>.
+ The path classes of QuPath will be the same as the path classes of <code>project</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>project</code> - the project to open</dd>
 <dt>See Also:</dt>
 <dd>
-<ul class="tag-list">
+<ul class="tag-list-long">
 <li><a href="https://qupath.github.io/javadoc/docs/qupath/lib/scripting/QP.html#getProject()" title="class or interface in qupath.lib.scripting" class="external-link"><code>QP.getProject()</code></a></li>
 <li><a href="https://qupath.github.io/javadoc/docs/qupath/lib/gui/QuPathGUI.html#setProject(qupath.lib.projects.Project)" title="class or interface in qupath.lib.gui" class="external-link"><code>QuPathGUI.setProject(Project)</code></a></li>
+<li><a href="https://qupath.github.io/javadoc/docs/qupath/lib/gui/QuPathGUI.html#getAvailablePathClasses()" title="class or interface in qupath.lib.gui" class="external-link"><code>QuPathGUI.getAvailablePathClasses()</code></a></li>
+<li><a href="https://qupath.github.io/javadoc/docs/qupath/lib/projects/Project.html#getPathClasses()" title="class or interface in qupath.lib.projects" class="external-link"><code>Project.getPathClasses()</code></a></li>
 </ul>
 </dd>
 </dl>
